@@ -1,6 +1,7 @@
 package com.vlat.RSTECHtestovoe.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.vlat.RSTECHtestovoe.entity.enums.ProductStatus;
 import jakarta.persistence.*;
 import lombok.Getter;
