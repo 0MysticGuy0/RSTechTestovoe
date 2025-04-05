@@ -20,6 +20,7 @@ public class ProductController {
 
     @PostMapping
     public ResponseEntity<RequestResponse> createProduct(@RequestBody Product product){
+        //TODO: get and save image from front (not required);
         service.save(product);
         return ResponseEntity.ok(RequestResponse.of("Successfully created!"));
     }
