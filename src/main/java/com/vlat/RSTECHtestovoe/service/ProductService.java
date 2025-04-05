@@ -11,6 +11,7 @@ import java.util.Optional;
 public interface ProductService {
     Optional<Product> getById(Long id);
     Product save(Product product);
+    Optional<Product> update(Product product);
     void deleteById(Long id);
     Page<Product> getAllByCategory(Long categoryId, Pageable pageable);
     Page<Product> getAllByFilter(ProductFilter productFilter, Pageable pageable);

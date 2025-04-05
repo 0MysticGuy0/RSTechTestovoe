@@ -37,6 +37,15 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     @Transactional
+    public Optional<Category> update(Category category) {
+        var persistentCategory = getById(category.getId());
+        if(persistentCategory.isEmpty())
+            return Optional.empty();
+        return Optional.of(save(category));
+    }
+
+    @Override
+    @Transactional
     public void deleteById(Long id) {
         productService.deleteCategory(id);
         repository.deleteById(id);

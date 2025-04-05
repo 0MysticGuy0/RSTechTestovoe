@@ -31,6 +31,14 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    @Transactional
+    public Optional<Product> update(Product product) {
+        var persistentProduct = getById(product.getId());
+        if(persistentProduct.isEmpty()) return Optional.empty();
+        return Optional.of(save(product));
+    }
+
+    @Override
     public void deleteById(Long id) {
         repository.deleteById(id);
     }

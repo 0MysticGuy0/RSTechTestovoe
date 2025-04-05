@@ -11,5 +11,6 @@ public interface CategoryService {
     Optional<Category> getById(Long id);
     Page<Category> getAll(Pageable pageable);
     Category save(Category category);
+    Optional<Category> update(Category category);
     void deleteById(Long id);
 }

@@ -3,6 +3,7 @@ package com.vlat.RSTECHtestovoe.controller;
 
 import com.vlat.RSTECHtestovoe.entity.Category;
 import com.vlat.RSTECHtestovoe.service.CategoryService;
+import com.vlat.RSTECHtestovoe.utils.RequestResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -20,26 +21,31 @@ public class CategoryController {
     private final CategoryService service;
 
     @PostMapping
-    public ResponseEntity<HttpStatus> createCategory(@RequestBody Category category){
+    public ResponseEntity<RequestResponse> createCategory(@RequestBody Category category){
         service.save(category);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(RequestResponse.of("Successfully created!"));
     }
 
-    //TODO: возвращать ошибку если нет переданного объекта
     @GetMapping
-    public ResponseEntity<Page<Category>> getCategories(@RequestParam("page_num") int pageNumber, @RequestParam("page_size") int pageSize){
-        return ResponseEntity.ok(service.getAll(PageRequest.of(pageNumber-1,pageSize)));
+    public ResponseEntity<RequestResponse> getCategories(@RequestParam("page_num") int pageNumber, @RequestParam("page_size") int pageSize){
+        return ResponseEntity.ok(
+                RequestResponse.of(
+                        service.getAll(PageRequest.of(pageNumber-1,pageSize))   )   );
     }
 
     @DeleteMapping("{id}")
-    public ResponseEntity<HttpStatus> deleteCategory(@PathVariable("id")Long id){
+    public ResponseEntity<RequestResponse> deleteCategory(@PathVariable("id")Long id){
         service.deleteById(id);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(RequestResponse.of("Category was deleted"));
     }
 
     @PutMapping
-    public ResponseEntity<Category> editCategory(@RequestBody Category category){
-        return ResponseEntity.ok(service.save(category));
+    public ResponseEntity<RequestResponse> editCategory(@RequestBody Category category){
+        var result = service.update(category);
+        if(result.isEmpty()){
+            return ResponseEntity.badRequest().body(RequestResponse.of("There is no Category with ID" + category.getId() + "!"));
+        }
+        return ResponseEntity.ok(RequestResponse.of("Successfully updated the category!", result.get()));
     }
 
 }
