@@ -1,0 +1,36 @@
+.category-item{
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    width: 100%;
+    background-color: white;
+
+    &__content{
+        padding: 10px;
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+        gap:5px;   
+    }
+
+    &__buttons{
+        display: flex;
+        flex-direction: column;
+        gap:1px;
+
+        button{
+            background-color: rgba(0, 0, 0, 0.808);
+            color: white;
+            flex-grow: 1;
+            border: none;
+            transition: all 0.2s;
+            padding: 5px;
+            &:hover{
+                scale: 1;
+                background-color: rgba(0, 0, 0, 0.527);
+                font-weight: 900;
+                transition: all 0.2s;
+            }
+        }
+    }
+}

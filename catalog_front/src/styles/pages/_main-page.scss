@@ -1,0 +1,89 @@
+.page-main{
+    padding: 20px;
+
+    &__products{
+        display: flex;
+        flex-direction: column;
+        justify-content: start;
+        align-items: stretch;
+        background-color:whitesmoke;
+
+        &__header{
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            gap:10px;
+            background-color: rgb(43, 43, 43);
+            h2{
+                color: white;
+            }
+        }
+
+        &__search{
+            display: flex;
+            flex-direction: row;
+            justify-content: stretch;
+            align-items: center;
+            padding-inline: 10px;
+            padding-block: 5px;
+            gap:40px;
+            background-color: rgba(0, 0, 0, 0.068);
+
+            .fields{
+                display: flex;
+                flex-direction: row;
+                gap: 5px;
+
+            }
+
+            input.search{
+                flex-grow: 1;
+                background-color: transparent;
+                border: none;
+                outline: none;
+            }
+            button.search-btn{
+                width: 35px;
+                aspect-ratio: 1/1;
+                border: none;
+                background-color: transparent;
+                background-image: url("/public/search.svg");
+                color: white;
+                background-size: contain;
+            }
+        }
+
+        &__list{
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: stretch;
+            gap: 10px;
+        }
+
+        &__page-settings{
+            background-color: rgba(0, 0, 0, 0.068);
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 20px;
+            padding: 10px;
+
+            &__size, &__number{
+                flex-wrap: wrap;
+                display: flex;
+                flex-direction: row;
+                gap: 10px;
+                align-items: center;
+
+                input{
+                    width: 50px;
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,6 @@
+@import './fonts', './vars', './global';
+
+@import './components/header', './components/productItem', './components/popup', './components/deleteDialog', './components/productEditor',
+ './components/categoryItem', './components/categoryEditor';
+
+@import './pages/main-page', './pages/categories-page';

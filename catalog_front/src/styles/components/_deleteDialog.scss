@@ -1,0 +1,23 @@
+
+.delete-dialog{
+    &__title{
+        background-color: rgb(46, 46, 46);
+        color: white;
+        padding: 20px;
+    }
+    &__content{
+        padding: 20px;
+        display: flex;
+        flex-direction: row;
+        justify-content: stretch;
+        align-items: center;
+        gap: 10px;
+
+        button{
+            flex-grow: 1;
+            font-size: 30px;
+            font-weight: 800;
+        }
+    }
+
+}

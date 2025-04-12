@@ -1,0 +1,59 @@
+
+.product-editor{
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+
+    &__title{
+        background-color: rgb(46, 46, 46);
+        color: white;
+        padding: 20px;
+    }
+
+    &__content{
+        padding: 10px;
+        display: flex;
+        flex-direction: row;
+        gap: 5px;
+
+        .left{
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            justify-content: center;
+
+            img{
+                width: 300px;
+                aspect-ratio: 1/1;
+                background-color: gainsboro;
+            }
+        }
+        .right{
+            display: flex;
+            flex-direction: column;
+            align-items: stretch;
+            gap: 5px;
+            .fields{
+                display: flex;
+                flex-direction: row;
+                gap: 5px;
+                
+                input, textarea, select{
+                    flex-grow: 1;
+                    resize: none;
+                    background-color: transparent;
+                    border: none;
+                }
+            }
+        }
+    }
+
+    &__saveBtn{
+        font-size: 30px;
+        font-weight: 900;
+        &:hover{
+            scale: 1.01;
+        }
+    }
+    
+}

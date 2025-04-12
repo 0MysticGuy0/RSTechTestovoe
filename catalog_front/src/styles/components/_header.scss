@@ -1,0 +1,35 @@
+header.header{
+    width: 100%;
+    padding: 20px;
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+    align-items: start;
+    gap: 20px;
+
+    .logo{
+        background-color: black;
+        padding: 20px;
+        font-weight: 900;
+        color: white;
+        font-size: 25px;
+        cursor: pointer;
+        transition: all 0.1s;
+        text-decoration: none;
+
+        &:hover{
+            scale: 1.05;
+            transition: all 0.1s;
+        }
+    }
+
+    .categoriesBtn{
+        color: #313131;
+        transition: all 0.1s;
+        &:hover{
+            color: black;
+            scale: 1.05;
+            transition: all 0.1s;
+        }
+    }
+}
