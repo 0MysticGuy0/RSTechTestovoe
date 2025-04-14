@@ -12,6 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.Optional;
 
 @Service
@@ -27,6 +28,8 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Product save(Product product) {
+        product.setCreationDate(new Date());
+        if(product.getCategory() != null) product.setStatus(ProductStatus.ACTIVE);
         return repository.save(product);
     }
 
@@ -41,7 +44,7 @@ public class ProductServiceImpl implements ProductService {
             product.setStatus(ProductStatus.NON_ACTIVE);
         }
         else if(product.getStatus() != ProductStatus.ACTIVE) product.setStatus(ProductStatus.ACTIVE);
-        return Optional.of(save(product));
+        return Optional.of(repository.save(product));
     }
 
     @Override

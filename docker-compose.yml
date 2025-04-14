@@ -1,0 +1,60 @@
+
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+    restart: always
+    container_name: rstech_app_c
+    environment:
+      PORT: 8028
+      DB_URL: ${DB_URL}
+      DB_USERNAME: ${DB_USERNAME}
+      DB_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - "8028:8028"
+    networks:
+      - app_network
+    depends_on:
+      - app-database
+
+  app-database:
+    image: postgres
+    restart: always
+    container_name: rstech_database_c
+    ports:
+      - "8055:5432"
+    environment:
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+      PGPORT: 5432
+    volumes:
+      - ./APP-DATABASE:/var/lib/postgresql/data
+    networks:
+      - app_network
+
+  web:
+    build: ./catalog_front/
+    restart: always
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/app
+      - ./node_modules:/app/node_modules
+    environment:
+      API_URL: ${API_URL}
+    stdin_open: true
+    tty: true
+    depends_on:
+      - app
+    command: npm start
+
+
+volumes:
+  APP-DATABASE:
+
+networks:
+  app_network:
+    driver: bridge

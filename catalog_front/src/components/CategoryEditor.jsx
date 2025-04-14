@@ -40,7 +40,7 @@ function CategoryEditor({category, onSaved, apiController}){
                             delete editedCategory.id
                             await apiController.createCategory(editedCategory)
                         }
-
+                        setEditedCategory(category ? {...category} : {name:"", description:""})
                         onSaved()
                     }}>Сохранить</button>
 

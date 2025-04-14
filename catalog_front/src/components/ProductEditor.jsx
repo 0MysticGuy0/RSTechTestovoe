@@ -7,7 +7,7 @@ function ProductEditor({product, onSaved, apiController, categories}){
     let fileSelector = useRef(null)
 
     useEffect(()=> {
-            setEditedProduct(product ? {...product} : {name:"", price:0, description:"",category:null})
+            setEditedProduct(product ? {...product} : {name:"", price:0, description:"",category:{id:-1}})
             setSelectedImage(null)
             fileSelector.value = null
     }, [product])
@@ -88,7 +88,9 @@ function ProductEditor({product, onSaved, apiController, categories}){
                             delete editedProduct.creationDate
                             await apiController.createProduct(editedProduct, selectedImage)
                         }
-
+                        setEditedProduct(product ? {...product} : {name:"", price:0, description:"",category:{id:-1}})
+                        setSelectedImage(null)
+                        fileSelector.value = null
                         onSaved()
                     }}>Сохранить</button>
 
