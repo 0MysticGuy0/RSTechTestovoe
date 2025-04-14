@@ -1,7 +1,7 @@
 import axios from "axios"
 
 export default class APIcontroller{
-    #API_ADDRESS = process.env.API_URL
+    #API_ADDRESS = process.env.REACT_APP_API_URL
     #API_CATEGORY_ADDRESS = this.#API_ADDRESS+"category/"
     #API_PRODUCT_ADDRESS = this.#API_ADDRESS+"product/"
     #API_IMAGE_ADDRESS = this.#API_ADDRESS+"product-image/"
