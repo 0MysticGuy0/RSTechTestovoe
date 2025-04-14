@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-function CategoryEditor({category}){
+function CategoryEditor({category, onSaved, apiController}){
 
     const [editedCategory, setEditedCategory] = useState({...category})
 
@@ -32,7 +32,17 @@ function CategoryEditor({category}){
                         </div>
                 </div>
 
-                <button disabled={!editedCategory} className="category-editor__saveBtn">Сохранить</button>
+                <button disabled={!editedCategory || editedCategory.name?.length <= 0} className="category-editor__saveBtn"
+                    onClick={async(x) => {
+                        if(category)
+                            await apiController.editCategory(editedCategory)
+                        else{
+                            delete editedCategory.id
+                            await apiController.createCategory(editedCategory)
+                        }
+
+                        onSaved()
+                    }}>Сохранить</button>
 
             </div>
     )

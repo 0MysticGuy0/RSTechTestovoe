@@ -52,6 +52,32 @@ button.char-button {
   font-weight: 900;
 }
 
+.loader {
+  align-self: center;
+  width: 70px;
+  aspect-ratio: 1/1;
+  border: 5px dotted black;
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  animation: loaderAnimation 2.5s infinite linear;
+}
+
+@keyframes loaderAnimation {
+  0% {
+    rotate: 0;
+    scale: 1;
+  }
+  50% {
+    scale: 0.8;
+  }
+  100% {
+    rotate: 360deg;
+    scale: 1;
+  }
+}
 header.header {
   width: 100%;
   padding: 20px;
@@ -209,6 +235,8 @@ header.header .categoriesBtn:hover {
   width: 300px;
   aspect-ratio: 1/1;
   background-color: gainsboro;
+  -o-object-fit: contain;
+     object-fit: contain;
 }
 .product-editor__content .right {
   display: flex;

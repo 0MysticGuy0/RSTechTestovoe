@@ -16,8 +16,8 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     Page<Product> findAllByCategoryId(@Param("categoryId") Long categoryId, Pageable pageable);
 
     @Query("Select l from Product l where " +
-            "(:#{#f.categoryId} IS NULL OR l.category.id = :#{#f.categoryId}) " +
-            "AND ( :#{#f.name} IS NULL OR l.name LIKE CONCAT('%', :#{#f.name}, '%')) " +
+            "(:#{#f.categoryId} IS NULL OR :#{#f.categoryId} < 0 OR l.category.id = :#{#f.categoryId}) " +
+            "AND ( :#{#f.name} IS NULL OR LOWER(l.name) LIKE CONCAT('%', :#{#f.name}, '%')) " +
             "AND (:#{#f.minPrice} IS NULL OR l.price >= :#{#f.minPrice}) " +
             "AND (:#{#f.maxPrice} IS NULL OR l.price <= :#{#f.maxPrice})")
     Page<Product> findAllByFilter(@Param("f") ProductFilter f, Pageable pageable);

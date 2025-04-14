@@ -1,5 +1,5 @@
 
-function ProductItem({onDelete, onEdit,
+function ProductItem({onDelete, onEdit, apiController,
     product = {id:0, name:"Product", description:"description description", price: 0.0, imagePath:"/logo.png", category:{name:"category"}, creationDate:"2020-05-04", status:"Active"}
 }){
     return (
@@ -9,7 +9,7 @@ function ProductItem({onDelete, onEdit,
         <div className="product-item">
             <div className="product-item__content">
                 <div className="left">
-                    <img src={product.imagePath} alt="изображение" />
+                    <img src={apiController.getProductImageUrl(product.imagePath)} alt="изображение" />
                 </div>
 
                 <div className="right">

@@ -35,6 +35,12 @@ public class ProductServiceImpl implements ProductService {
     public Optional<Product> update(Product product) {
         var persistentProduct = getById(product.getId());
         if(persistentProduct.isEmpty()) return Optional.empty();
+
+        if(product.getCategory() == null || product.getCategory().getId() < 0) {
+            product.setCategory(null);
+            product.setStatus(ProductStatus.NON_ACTIVE);
+        }
+        else if(product.getStatus() != ProductStatus.ACTIVE) product.setStatus(ProductStatus.ACTIVE);
         return Optional.of(save(product));
     }
 

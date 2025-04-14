@@ -1,29 +1,63 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Popup from "../components/Popup";
 import ProductItem from "../components/ProductItem";
 import DeleteDialog from "../components/DeleteDialog";
 import ProductEditor from "../components/ProductEditor";
+import APIcontroller from "../API/ApiController";
+import { useFetching } from "../hooks/useFetching";
 
 function Main(){
 
     const [deleteProductDialogVisible, setDeleteProductDialogVisible] = useState(false)
     const [editProductDialogVisible, setEditProductDialogVisible] = useState(false);
     const [currentProduct, setCurrentProduct] = useState(null)
-    const [filter, setFilter] = useState({name:"", minPrice:null, maxPrice:null, category:{id:null}})
+    const [filter, setFilter] = useState({name:"", minPrice:null, maxPrice:null, categoryId: null})
     const [pageData, setPageData] = useState({size:10, number:1, maxPage:10})
 
-    function getCategoriesF(){
-        return [{id:null, name:"all"},{id:1, name:"a"}, {id:2, name:"b"}]
-    }
+
+    const apiControler = new APIcontroller();
+        const [fetchedCategories, setFetchedCategories] = useState([])
+        const [fetchCategories, isLoadingcategories, fetchingCategoriesError] = useFetching(async() => {
+            const resBody = (await apiControler.getAllCategories(pageData)).body
+            setFetchedCategories([{id:-1, name:""},...resBody.content])
+        })
+
+        const [fetchedProducts, setFetchedProducts] = useState([])
+        const [fetchProducts, isLoadingProducts, fetchingProductsError] = useFetching(async() => {
+            const resBody = (await apiControler.getAllProducts(pageData, filter)).body
+            setPageData({...pageData, maxPage: resBody.totalPages})
+            setFetchedProducts(resBody.content)
+        })
+    
+        useEffect(()=> {
+            fetchCategories()
+            fetchProducts()
+        }, [pageData.size, pageData.number, filter])
+
+    
+        async function deleteProduct(product){
+            await apiControler.deleteProductById(product?.id)
+            fetchProducts()
+        }
+    
+
 
     return (
     <div className="page page-main">
         <Popup active={deleteProductDialogVisible} setActive={setDeleteProductDialogVisible}>
-            <DeleteDialog deletedName={currentProduct?.name} onCancel={x => setDeleteProductDialogVisible(false)}/>
+            <DeleteDialog deletedName={currentProduct?.name} onCancel={x => setDeleteProductDialogVisible(false)}
+                onAccept={x => {
+                    deleteProduct(currentProduct)
+                    setDeleteProductDialogVisible(false)
+                }}/>
         </Popup>
 
         <Popup active ={editProductDialogVisible} setActive={setEditProductDialogVisible}>
-            <ProductEditor product={currentProduct}/>
+            <ProductEditor product={currentProduct}   apiController={apiControler} categories={fetchedCategories}
+                onSaved={() => {
+                    setEditProductDialogVisible(false)
+                    fetchProducts()
+                }}/>
         </Popup>
 
         <div className="page-main__products">
@@ -42,10 +76,10 @@ function Main(){
                 
                 <div className="fields">
                     <span className="text">Категрия:</span>
-                    <select className="text" value={filter.category.id}
-                                onChange={v => setFilter({...filter, category:{id:v.target.value}})}>
+                    <select className="text" value={filter.categoryId}
+                                onChange={v => setFilter({...filter, categoryId: v.target.value})}>
                                 {
-                                    getCategoriesF().map(c => (
+                                    fetchedCategories.map(c => (
                                         <option value={c.id}>{c.name}</option>
                                     ))
                                 }
@@ -67,22 +101,21 @@ function Main(){
             </div>
 
             <div className="page-main__products__list">
-                <ProductItem onDelete={() => {
-                    setCurrentProduct({name: "alala"})
-                    setDeleteProductDialogVisible(true)
-                    }}
-                    onEdit={() => {
-                    setCurrentProduct({name: "alala"})
-                    setEditProductDialogVisible(true)
-                    }}/>
-                <ProductItem onDelete={() => {
-                        setCurrentProduct({name: "ololo"})
-                        setDeleteProductDialogVisible(true)
-                        }}
-                        onEdit={() => {
-                        setCurrentProduct({name: "ololo"})
-                        setEditProductDialogVisible(true)
-                        }}/>   
+                {isLoadingcategories && <div className="loader"/>}
+                {fetchingProductsError}
+                {
+                    fetchedProducts.map(p => (
+                        <ProductItem key={p.id} product={p} apiController={apiControler}
+                        onDelete={() => {
+                            setCurrentProduct(p)
+                            setDeleteProductDialogVisible(true)
+                            }}
+                            onEdit={() => {
+                            setCurrentProduct(p)
+                            setEditProductDialogVisible(true)
+                            }}/> 
+                    ))
+                }
             </div>
 
             <div className="page-main__products__page-settings">
@@ -97,7 +130,7 @@ function Main(){
                     <input className="text bold page-num" value={pageData.number} type="number" min={1} max={pageData.maxPage} defaultValue={1}
                         onChange={v => setPageData({...pageData, number: v.target.value})}/>
                         
-                    <span className="text bold">/ 10</span>
+                    <span className="text bold">/ {pageData.maxPage}</span>
                 </div>
             </div>
         </div>

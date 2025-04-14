@@ -1,13 +1,16 @@
 package com.vlat.RSTECHtestovoe.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.vlat.RSTECHtestovoe.entity.enums.ProductStatus;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.util.Date;
 
 @Entity
@@ -36,4 +39,5 @@ public class Product {
 
     @Enumerated(value = EnumType.STRING)
     private ProductStatus status;
+
 }

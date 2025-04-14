@@ -1,18 +1,17 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
-function ProductEditor({product}){
+function ProductEditor({product, onSaved, apiController, categories}){
 
     const [editedProduct, setEditedProduct] = useState({...product})
+    const [selectedImage, setSelectedImage] = useState(null)
+    let fileSelector = useRef(null)
 
     useEffect(()=> {
             setEditedProduct(product ? {...product} : {name:"", price:0, description:"",category:null})
+            setSelectedImage(null)
+            fileSelector.value = null
     }, [product])
 
-    
-
-    function getCategories(){
-        return [{id:1, name:"a"}, {id:2, name:"b"}]
-    }
 
     return (
             <div className="product-editor">
@@ -23,8 +22,14 @@ function ProductEditor({product}){
 
                 <div className="product-editor__content">
                     <div className="left">
-                        {product && <img src={product.imagePath} alt="изображение" />}
-                        <input type="file" className="loadImage"  accept="image/*"/>
+                        {product && <img src={apiController.getProductImageUrl(product.imagePath)} alt="изображение" />}
+                        <input type="file" className="loadImage"  accept="image/*" ref={r => fileSelector=r}
+                            onChange={v => {
+                                console.log(v.target.files[0])
+                                if(v.target.files.length > 0){
+                                    setSelectedImage(v.target.files[0])
+                                }
+                            }}/>
                     </div>
 
                     <div className="right">
@@ -48,11 +53,11 @@ function ProductEditor({product}){
                         <hr />
                         <div className="fields">
                             <span className="text bold">Категория:</span>
-                            <select value={editedProduct?.category?.id} className="text" 
+                            <select value={editedProduct?.category?.id} className="text" required={false}
                                 onChange={v => setEditedProduct({...editedProduct, category:{id:v.target.value}})}>
                                 {
-                                    getCategories().map(c => (
-                                        <option value={c.id}>{c.name}</option>
+                                    categories.map(c => (
+                                        <option key={c.id} value={c.id}>{c.name}</option>
                                     ))
                                 }
                             </select>
@@ -73,7 +78,19 @@ function ProductEditor({product}){
                     </div>
                 </div>
 
-                <button disabled={!editedProduct.category} className="product-editor__saveBtn">Сохранить</button>
+                <button disabled={(editedProduct.category?.id < 0 && !product) || editedProduct.name?.length == 0} className="product-editor__saveBtn"
+                    onClick={async(x) => {
+                        if(product)
+                            await apiController.editProduct(editedProduct, selectedImage)
+                        else{
+                            delete editedProduct.id
+                            delete editedProduct.imagePath
+                            delete editedProduct.creationDate
+                            await apiController.createProduct(editedProduct, selectedImage)
+                        }
+
+                        onSaved()
+                    }}>Сохранить</button>
 
             </div>
     )
